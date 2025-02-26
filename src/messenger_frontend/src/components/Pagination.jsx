@@ -1,28 +1,40 @@
 import React from "react";
-import { messenger_backend } from "declarations/messenger_backend";
 
-function MessageList({ messages }) {
-  // ✅ Delete Message
-  const handleDelete = async (id) => {
-    await messenger_backend.deleteMessage(id);
-    window.location.reload(); // Refresh after deletion
-  };
+function Pagination({ totalMessages, messagesPerPage, currentPage, fetchPage }) {
+  const totalPages = Math.ceil(totalMessages / messagesPerPage);
+
+  if (totalPages <= 1) return null; // Hide pagination if only 1 page
 
   return (
-    <div>
-      {messages.length === 0 ? (
-        <p>No messages found.</p>
-      ) : (
-        messages.map((msg) => (
-          <div key={msg.id} className="message">
-            <p>{msg.content}</p>
-            <small>{new Date(Number(msg.timestamp) / 1000000).toLocaleString()}</small>
-            <button onClick={() => handleDelete(msg.id)}>Delete</button>
-          </div>
-        ))
-      )}
+    <div className="pagination">
+      {/* Previous Button */}
+      <button 
+        onClick={() => fetchPage(currentPage - 1)} 
+        disabled={currentPage === 1}
+      >
+        Prev
+      </button>
+
+      {/* Page Numbers */}
+      {Array.from({ length: totalPages }, (_, index) => (
+        <button 
+          key={index + 1}
+          className={currentPage === index + 1 ? "active" : ""}
+          onClick={() => fetchPage(index + 1)}
+        >
+          {index + 1}
+        </button>
+      ))}
+
+      {/* Next Button */}
+      <button 
+        onClick={() => fetchPage(currentPage + 1)} 
+        disabled={currentPage === totalPages}
+      >
+        Next
+      </button>
     </div>
   );
 }
 
-export default MessageList;
+export default Pagination;
