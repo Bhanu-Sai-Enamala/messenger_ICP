@@ -1,0 +1,26 @@
+{
+  "canisters": {
+    "messenger_backend": {
+      "main": "src/messenger_backend/main.mo",
+      "type": "motoko"
+    },
+    "messenger_frontend": {
+      "dependencies": [
+        "messenger_backend"
+      ],
+      "source": [
+        "src/messenger_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "messenger_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
